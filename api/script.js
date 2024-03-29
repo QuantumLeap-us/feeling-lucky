@@ -47,7 +47,7 @@ app.get('/api/lucky', async (req, res) => {
 
 // Serve the HTML file for all other routes to enable client-side routing
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public', 'im-feeling-lucky-frame.html'));
+    res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });
 
 // Start the server only if it's not running through Vercel
