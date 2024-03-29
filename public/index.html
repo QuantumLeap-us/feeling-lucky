@@ -29,8 +29,7 @@
                     return response.json();
                 })
                 .then(data => {
-                    const jokeElement = document.getElementById('joke');
-                    jokeElement.textContent = data.joke || data.setup + "\n" + data.delivery || data.message;
+                    document.getElementById('joke').textContent = data.message;
                 })
                 .catch(error => {
                     console.error('Error:', error);

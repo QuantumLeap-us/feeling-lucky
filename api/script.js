@@ -11,7 +11,6 @@
  */
 
 const axios = require('axios');
-const path = require('path');
 
 module.exports = async (req, res) => {
     try {
@@ -21,15 +20,16 @@ module.exports = async (req, res) => {
             }
         });
 
+        // Ensure a proper JSON response structure, considering different joke types
         if (jokeApiResponse.data.type === 'single') {
-            res.json({ joke: jokeApiResponse.data.joke });
+            res.json({ message: jokeApiResponse.data.joke });
         } else if (jokeApiResponse.data.type === 'twopart') {
-            res.json({ setup: jokeApiResponse.data.setup, delivery: jokeApiResponse.data.delivery });
+            res.json({ message: `${jokeApiResponse.data.setup} ... ${jokeApiResponse.data.delivery}` });
         } else {
             res.json({ message: 'No joke found, try again!' });
         }
     } catch (error) {
         console.error('Error fetching joke:', error);
-        res.status(500).json({ message: 'Failed to fetch joke, please try again later.' });
+        res.status(500).send({ message: 'Failed to fetch joke, please try again later.' });
     }
 };
