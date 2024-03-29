@@ -1,23 +1,49 @@
-body, html {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: url('background.png') no-repeat center center fixed;
-    background-size: cover;
-  }
-  
-  #container {
-    text-align: center;
-    max-width: 90%; /* Adjust if necessary to fit within the borders of your background image */
-    margin: auto;
-  }
-  
-  button, p {
-    margin: 20px;
-    padding: 10px;
-  }
-  
+/* Resetting default margin and padding */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Setting up the background image */
+body {
+  background: url('background.png') no-repeat center center fixed; 
+  background-size: cover; /* Cover the entire page */
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Center content vertically and horizontally */
+}
+
+/* Styling the container */
+#container {
+  text-align: center; /* Center-align text */
+  padding: 2%; /* Add some padding */
+  max-width: 800px; /* Maximum width */
+  margin: 20px; /* Margin around the container */
+  background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+  border-radius: 15px; /* Rounded corners */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* Shadow for depth */
+}
+
+/* Styling the button */
+#lucky-button {
+  background-color: #4CAF50; /* Green background */
+  color: white; /* White text */
+  padding: 14px 20px; /* Padding */
+  margin: 8px 0; /* Margin top and bottom */
+  border: none; /* No border */
+  cursor: pointer; /* Pointer cursor on hover */
+  border-radius: 5px; /* Rounded corners */
+}
+
+#lucky-button:hover {
+  background-color: #45a049; /* Darker green background on hover */
+}
+
+/* Styling the joke paragraph */
+#joke {
+  color: #333; /* Dark text color for contrast */
+  font-size: 1.2em; /* Slightly larger font size */
+  margin-top: 20px; /* Space above the joke text */
+}
