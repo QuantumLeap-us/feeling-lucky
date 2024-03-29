@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I'm Feeling Lucky Frame</title>
+</head>
+<body>
+    <button id="lucky-button">I'm Feeling Lucky</button>
+    <p id="joke"></p>
+
+    <script>
+        document.getElementById('lucky-button').addEventListener('click', function() {
+            fetch('/lucky')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('joke').textContent = data.message;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+    </script>
+</body>
+</html>
