@@ -2,15 +2,15 @@
   "name": "feeling-lucky",
   "version": "1.0.0",
   "description": "A simple 'I'm Feeling Lucky' joke app frame for Warpcast.",
-  "main": "im-feeling-lucky-frame.js",
+  "main": "api/im-feeling-lucky-frame.js",
   "scripts": {
-    "start": "node im-feeling-lucky-frame.js",
+    "start": "node api/im-feeling-lucky-frame.js",
     "build": "echo \"No build step required\""
   },
   "dependencies": {
     "axios": "^1.6.8",
     "express": "^4.19.2"
   },
-  "author": "",
+  "author": "Jams2blues Creations LLC",
   "license": "ISC"
 }

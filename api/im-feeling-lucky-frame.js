@@ -10,37 +10,32 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
+// Include the Express module
 const express = require('express');
 const axios = require('axios');
 const path = require('path');
+
+// Create an Express application
 const app = express();
 
-app.use(express.static('.')); // Serving static files from the root directory
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
-// Serve the HTML file on the root route
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'im-feeling-lucky-frame.html'));
-});
-
-app.get('/lucky', async (req, res) => {
+// API endpoint for getting jokes
+app.get('/api/lucky', async (req, res) => {
     try {
-        const response = await axios.get('https://v2.jokeapi.dev/joke/Any', {
+        const jokeApiResponse = await axios.get('https://v2.jokeapi.dev/joke/Any', {
             params: {
                 blacklistFlags: 'racist',
-                // Removed the 'type' parameter to fetch both single and two-part jokes
+                // The 'type' parameter has been removed to fetch both single and two-part jokes
             }
         });
 
-        if (response.data) {
-            let jokeMessage = '';
-            // Constructing the joke message based on its type
-            if (response.data.joke) {
-                jokeMessage = response.data.joke; // For single-part jokes
-            } else if (response.data.setup && response.data.delivery) {
-                jokeMessage = `${response.data.setup} ... ${response.data.delivery}`; // For two-part jokes
-            }
-
-            res.json({ message: jokeMessage });
+        // Check the structure of the joke and respond accordingly
+        if (jokeApiResponse.data.type === 'single') {
+            res.json({ joke: jokeApiResponse.data.joke });
+        } else if (jokeApiResponse.data.type === 'twopart') {
+            res.json({ setup: jokeApiResponse.data.setup, delivery: jokeApiResponse.data.delivery });
         } else {
             res.json({ message: 'No joke found, try again!' });
         }
@@ -50,12 +45,18 @@ app.get('/lucky', async (req, res) => {
     }
 });
 
-// Listen on the port only when not in Vercel's environment
+// Serve the HTML file for all other routes to enable client-side routing
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'public', 'im-feeling-lucky-frame.html'));
+});
+
+// Start the server only if it's not running through Vercel
 if (!process.env.VERCEL) {
-    const PORT = process.env.PORT || 3001; // Using 3001 as the default port for local development
+    const PORT = process.env.PORT || 3001; // Default to port 3001 if no environment port is specified
     app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
+        console.log(`Server is up and running on port ${PORT}`);
     });
 }
 
+// Export the app for Vercel
 module.exports = app;

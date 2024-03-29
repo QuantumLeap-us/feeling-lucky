@@ -11,7 +11,7 @@
     <meta property="og:image" content="https://i.imgur.com/DwpeQ0Q.jpeg" />
     <meta property="og:url" content="https://feeling-lucky.vercel.app" />
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div id="container">
@@ -22,7 +22,7 @@
     <script>
         // Client-side JavaScript to handle button clicks and fetch jokes
         document.getElementById('lucky-button').addEventListener('click', function() {
-            fetch('/lucky')
+            fetch('/api/lucky')
                 .then(response => response.json())
                 .then(data => {
                     // Display the fetched joke in the <p> element
