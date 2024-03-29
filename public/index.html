@@ -23,14 +23,18 @@
         // Client-side JavaScript to handle button clicks and fetch jokes
         document.getElementById('lucky-button').addEventListener('click', function() {
             fetch('/api/lucky')
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
                 .then(data => {
-                    // Display the fetched joke in the <p> element
-                    document.getElementById('joke').textContent = data.message;
+                    document.getElementById('joke').textContent = data.message || data.joke;
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    // Optionally, handle errors by displaying a message to the user
+                    document.getElementById('joke').textContent = 'Error fetching joke.';
                 });
         });
     </script>

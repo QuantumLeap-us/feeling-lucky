@@ -21,13 +21,11 @@ const app = express();
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
-// API endpoint for getting jokes
 app.get('/api/lucky', async (req, res) => {
     try {
         const jokeApiResponse = await axios.get('https://v2.jokeapi.dev/joke/Any', {
             params: {
-                blacklistFlags: 'racist',
-                // The 'type' parameter has been removed to fetch both single and two-part jokes
+                blacklistFlags: 'racist', // Add any other parameters you wish to include
             }
         });
 
@@ -37,11 +35,13 @@ app.get('/api/lucky', async (req, res) => {
         } else if (jokeApiResponse.data.type === 'twopart') {
             res.json({ setup: jokeApiResponse.data.setup, delivery: jokeApiResponse.data.delivery });
         } else {
+            // Respond with a generic message if no joke was found
             res.json({ message: 'No joke found, try again!' });
         }
     } catch (error) {
+        // Log the error and send a 500 server error status code with a message
         console.error('Error fetching joke:', error);
-        res.status(500).json({ message: 'Failed to fetch joke, please try again later.', error: error.message });
+        res.status(500).json({ message: 'Failed to fetch joke, please try again later.' });
     }
 });
 
