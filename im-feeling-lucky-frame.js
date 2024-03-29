@@ -1,8 +1,14 @@
 const express = require('express');
 const axios = require('axios');
+const path = require('path');
 const app = express();
 
-app.use(express.static('.'));
+app.use(express.static('.')); // Make sure this path is correct for your static files
+
+// Serve the HTML file on the root route
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'im-feeling-lucky-frame.html')); // Update the path if necessary
+});
 
 app.get('/lucky', async (req, res) => {
     try {
