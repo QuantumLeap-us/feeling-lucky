@@ -4,22 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>I'm Feeling Lucky Frame</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="I'm Feeling Lucky Joke App" />
+    <meta property="og:description" content="Get a random joke every time you feel lucky!" />
+    <meta property="og:image" content="URL_TO_YOUR_IMAGE" />
+    <meta property="og:url" content="https://feeling-lucky.vercel.app" />
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <button id="lucky-button">I'm Feeling Lucky</button>
-    <p id="joke"></p>
+    <div id="container">
+        <button id="lucky-button">I'm Feeling Lucky</button>
+        <p id="joke"></p>
+    </div>
 
-    <script>
-        document.getElementById('lucky-button').addEventListener('click', function() {
-            fetch('/lucky')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('joke').textContent = data.message;
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        });
-    </script>
+    <script src="im-feeling-lucky-frame.js"></script>
 </body>
 </html>
