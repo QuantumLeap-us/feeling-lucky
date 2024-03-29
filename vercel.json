@@ -7,7 +7,6 @@
     }
   ],
   "rewrites": [
-    { "source": "/lucky", "destination": "/im-feeling-lucky-frame.js" },
     { "source": "/(.*)", "destination": "/im-feeling-lucky-frame.html" }
   ]
 }
