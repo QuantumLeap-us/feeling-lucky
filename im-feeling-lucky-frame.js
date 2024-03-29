@@ -2,10 +2,8 @@ const express = require('express');
 const axios = require('axios');
 const app = express();
 
-// Serve static files (HTML, CSS, JS, etc.)
 app.use(express.static('.'));
 
-// Endpoint to fetch a joke
 app.get('/lucky', async (req, res) => {
     try {
         const response = await axios.get('https://v2.jokeapi.dev/joke/Any');
@@ -20,8 +18,12 @@ app.get('/lucky', async (req, res) => {
     }
 });
 
-// Listen on the specified port or 3000
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+// Conditionally listen on the port only when not in Vercel's environment
+if (!process.env.VERCEL) {
+    const PORT = process.env.PORT || 3001;
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
+}
+
+module.exports = app;
