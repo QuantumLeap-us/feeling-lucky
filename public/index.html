@@ -20,17 +20,17 @@
     </div>
 
     <script>
-        // Client-side JavaScript to handle button clicks and fetch jokes
         document.getElementById('lucky-button').addEventListener('click', function() {
             fetch('/api/lucky')
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                        throw new Error(`Network response was not ok: ${response.statusText}`);
                     }
                     return response.json();
                 })
                 .then(data => {
-                    document.getElementById('joke').textContent = data.message || data.joke;
+                    const jokeElement = document.getElementById('joke');
+                    jokeElement.textContent = data.joke || data.setup + "\n" + data.delivery || data.message;
                 })
                 .catch(error => {
                     console.error('Error:', error);
