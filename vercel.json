@@ -1,0 +1,17 @@
+{
+    "version": 2,
+    "routes": [
+      {
+        "src": "/api/lucky",
+        "dest": "/api/script.js"
+      },
+      {
+        "src": "/(.*)",
+        "dest": "/public/index.html"
+      }
+    ],
+    "rewrites": [
+      { "source": "/(.+\\.(css|png))$", "destination": "/public/$1" }
+    ]
+  }
+  

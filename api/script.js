@@ -13,23 +13,30 @@
 const axios = require('axios');
 
 module.exports = async (req, res) => {
+    console.log("Incoming request to /api/lucky");
+
     try {
+        console.log("Fetching joke from JokeAPI");
         const jokeApiResponse = await axios.get('https://v2.jokeapi.dev/joke/Any', {
             params: {
                 blacklistFlags: 'racist',
             }
         });
 
-        // Ensure a proper JSON response structure, considering different joke types
+        console.log("JokeAPI response:", jokeApiResponse.data);
+
         if (jokeApiResponse.data.type === 'single') {
+            console.log("Responding with single joke");
             res.json({ message: jokeApiResponse.data.joke });
         } else if (jokeApiResponse.data.type === 'twopart') {
+            console.log("Responding with two-part joke");
             res.json({ message: `${jokeApiResponse.data.setup} ... ${jokeApiResponse.data.delivery}` });
         } else {
+            console.log("No joke found in response");
             res.json({ message: 'No joke found, try again!' });
         }
     } catch (error) {
-        console.error('Error fetching joke:', error);
-        res.status(500).send({ message: 'Failed to fetch joke, please try again later.' });
+        console.error('Error fetching joke from JokeAPI:', error);
+        res.status(500).json({ message: 'Failed to fetch joke, please try again later.' });
     }
 };
