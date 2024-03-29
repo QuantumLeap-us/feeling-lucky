@@ -1,17 +1,14 @@
 {
     "version": 2,
-    "routes": [
+    "rewrites": [
       {
-        "src": "/api/lucky",
-        "dest": "/api/script.js"
+        "source": "/api/lucky",
+        "destination": "/api/script.js"
       },
       {
-        "src": "/(.*)",
-        "dest": "/public/index.html"
+        "source": "/(.*)",
+        "destination": "/public/index.html"
       }
-    ],
-    "rewrites": [
-      { "source": "/(.+\\.(css|png))$", "destination": "/public/$1" }
     ]
   }
   
