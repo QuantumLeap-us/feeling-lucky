@@ -9,15 +9,18 @@
   "routes": [
     {
       "src": "/lucky",
-      "dest": "/im-feeling-lucky-frame.js"
+      "dest": "im-feeling-lucky-frame.js"
     },
     {
       "src": "/(.*).(js|css|png|jpg|jpeg|gif|svg|ico)",
       "dest": "/$1.$2"
     },
     {
-      "src": "/",
-      "dest": "/im-feeling-lucky-frame.html"
+      "src": "/(.*)",
+      "dest": "im-feeling-lucky-frame.html"
     }
+  ],
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/im-feeling-lucky-frame.html" }
   ]
 }
