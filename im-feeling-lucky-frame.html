@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>I'm Feeling Lucky Frame</title>
+    <!-- Open Graph Meta Tags -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="I'm Feeling Lucky Joke App" />
     <meta property="og:description" content="Get a random joke every time you feel lucky!" />
     <meta property="og:image" content="https://i.imgur.com/DwpeQ0Q.jpeg" />
     <meta property="og:url" content="https://feeling-lucky.vercel.app" />
+    <!-- Stylesheet -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -16,5 +18,21 @@
         <button id="lucky-button">I'm Feeling Lucky</button>
         <p id="joke"></p>
     </div>
+
+    <script>
+        // Client-side JavaScript to handle button clicks and fetch jokes
+        document.getElementById('lucky-button').addEventListener('click', function() {
+            fetch('/lucky')
+                .then(response => response.json())
+                .then(data => {
+                    // Display the fetched joke in the <p> element
+                    document.getElementById('joke').textContent = data.message;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Optionally, handle errors by displaying a message to the user
+                });
+        });
+    </script>
 </body>
 </html>

@@ -8,8 +8,8 @@ html, body {
 
 /* Setting up the background image */
 body {
-  background: url('background.png') no-repeat center center fixed; 
-  background-size: cover; /* Cover the entire page */
+  background: url('background.png') no-repeat center center fixed;
+  background-size: 100% 100%; /* Stretch background to cover the entire page */
   display: flex;
   justify-content: center;
   align-items: center; /* Center content vertically and horizontally */
