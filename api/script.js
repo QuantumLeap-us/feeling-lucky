@@ -10,34 +10,43 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-// script.js
 const axios = require('axios');
 
+//Converts POST requests to GET for compatibility with APIs requiring GET.
 module.exports = async (req, res) => {
-    // Check if the request is a POST request to the expected endpoint
-    if (req.method === 'POST' && req.url === '/api/lucky') {
-        try {
-            // Fetch a random joke from the JokeAPI
-            const response = await axios.get('https://v2.jokeapi.dev/joke/Any', {
-                params: {
-                    blacklistFlags: 'racist',  // Specify any additional parameters as needed
-                }
-            });
-
-            // Respond with the joke data based on the joke type
-            if (response.data.type === 'single') {
-                res.json({ joke: response.data.joke });
-            } else if (response.data.type === 'twopart') {
-                res.json({ setup: response.data.setup, delivery: response.data.delivery });
-            } else {
-                res.status(404).json({ message: 'Joke not found' });
-            }
-        } catch (error) {
-            console.error('Error fetching joke:', error);
-            res.status(500).json({ error: 'Internal Server Error' });
-        }
+    // Check if the request is for fetching a joke
+    if (req.url === '/api/lucky' && req.method === 'GET') {
+        fetchJoke(res);
+    } else if (req.url === '/api/post-joke' && req.method === 'POST') {
+        // This route handles POST requests from the frame's meta button
+        fetchJoke(res);
     } else {
-        // Respond with a method not allowed error if the request does not match
-        res.status(405).send('Method Not Allowed');
+        // Handle non-GET/POST requests or other routes
+        res.status(405).send({ message: 'Method Not Allowed' });
     }
 };
+
+function fetchJoke(res) {
+    console.log("Fetching joke from JokeAPI");
+    axios.get('https://v2.jokeapi.dev/joke/Any', {
+        params: {
+            blacklistFlags: 'racist',
+        }
+    }).then(jokeApiResponse => {
+        console.log("JokeAPI response:", jokeApiResponse.data);
+
+        if (jokeApiResponse.data.type === 'single') {
+            console.log("Responding with single joke");
+            res.json({ message: jokeApiResponse.data.joke });
+        } else if (jokeApiResponse.data.type === 'twopart') {
+            console.log("Responding with two-part joke");
+            res.json({ message: `${jokeApiResponse.data.setup} ... ${jokeApiResponse.data.delivery}` });
+        } else {
+            console.log("No joke found in response");
+            res.json({ message: 'No joke found, try again!' });
+        }
+    }).catch(error => {
+        console.error('Error fetching joke from JokeAPI:', error);
+        res.status(500).json({ message: 'Failed to fetch joke, please try again later.' });
+    });
+}
