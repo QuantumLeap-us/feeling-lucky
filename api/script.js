@@ -14,27 +14,30 @@
 const axios = require('axios');
 
 module.exports = async (req, res) => {
-    if (req.method === 'POST') {
+    // Check if the request is a POST request to the expected endpoint
+    if (req.method === 'POST' && req.url === '/api/lucky') {
         try {
-            const jokeApiResponse = await axios.get('https://v2.jokeapi.dev/joke/Any', {
+            // Fetch a random joke from the JokeAPI
+            const response = await axios.get('https://v2.jokeapi.dev/joke/Any', {
                 params: {
-                    blacklistFlags: 'racist',
+                    blacklistFlags: 'racist',  // Specify any additional parameters as needed
                 }
             });
 
-            if (jokeApiResponse.data.type === 'single') {
-                res.json({ message: jokeApiResponse.data.joke });
-            } else if (jokeApiResponse.data.type === 'twopart') {
-                res.json({ message: `${jokeApiResponse.data.setup} ... ${jokeApiResponse.data.delivery}` });
+            // Respond with the joke data based on the joke type
+            if (response.data.type === 'single') {
+                res.json({ joke: response.data.joke });
+            } else if (response.data.type === 'twopart') {
+                res.json({ setup: response.data.setup, delivery: response.data.delivery });
             } else {
-                res.json({ message: 'No joke found, try again!' });
+                res.status(404).json({ message: 'Joke not found' });
             }
         } catch (error) {
             console.error('Error fetching joke:', error);
-            res.status(500).json({ message: 'Failed to fetch joke, please try again later.' });
+            res.status(500).json({ error: 'Internal Server Error' });
         }
     } else {
-        // Handle non-POST requests or return a simple message
-        res.status(405).send({ message: 'Method Not Allowed' });
+        // Respond with a method not allowed error if the request does not match
+        res.status(405).send('Method Not Allowed');
     }
 };
