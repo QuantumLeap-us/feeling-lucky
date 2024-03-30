@@ -13,29 +13,27 @@
 const axios = require('axios');
 
 module.exports = async (req, res) => {
-    // Check if the incoming request is a POST request
-    if (req.method === 'POST') {
-        try {
-            const jokeApiResponse = await axios.get('https://v2.jokeapi.dev/joke/Any', {
-                params: {
-                    blacklistFlags: 'racist',
-                }
-            });
+    if (req.method !== 'POST') {
+        // Respond with an error if the request method is not POST
+        return res.status(405).send({ error: 'Method Not Allowed' });
+    }
 
-            if (jokeApiResponse.data.type === 'single') {
-                res.json({ message: jokeApiResponse.data.joke });
-            } else if (jokeApiResponse.data.type === 'twopart') {
-                res.json({ message: `${jokeApiResponse.data.setup} ... ${jokeApiResponse.data.delivery}` });
-            } else {
-                res.json({ message: 'No joke found, try again!' });
+    try {
+        const jokeApiResponse = await axios.get('https://v2.jokeapi.dev/joke/Any', {
+            params: {
+                blacklistFlags: 'racist',
             }
-        } catch (error) {
-            console.error('Error fetching joke:', error);
-            res.status(500).json({ message: 'Failed to fetch joke, please try again later.' });
+        });
+
+        if (jokeApiResponse.data.type === 'single') {
+            res.json({ message: jokeApiResponse.data.joke });
+        } else if (jokeApiResponse.data.type === 'twopart') {
+            res.json({ message: `${jokeApiResponse.data.setup} ... ${jokeApiResponse.data.delivery}` });
+        } else {
+            res.json({ message: 'No joke found, try again!' });
         }
-    } else {
-        // Respond with an error or redirect if the request is not a POST
-        res.status(405).json({ error: 'Method Not Allowed' });
+    } catch (error) {
+        console.error('Error fetching joke:', error);
+        res.status(500).json({ message: 'Failed to fetch joke, please try again later.' });
     }
 };
-
