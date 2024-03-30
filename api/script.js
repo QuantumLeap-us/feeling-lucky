@@ -12,17 +12,24 @@
 
 const axios = require('axios');
 
-//Converts POST requests to GET for compatibility with APIs requiring GET.
 module.exports = async (req, res) => {
     // Check if the request is for fetching a joke
-    if (req.url === '/api/lucky' && req.method === 'GET') {
-        fetchJoke(res);
-    } else if (req.url === '/api/post-joke' && req.method === 'POST') {
-        // This route handles POST requests from the frame's meta button
-        fetchJoke(res);
+    if (req.url === '/api/lucky') {
+        if (req.method === 'GET') {
+            // Existing logic to fetch and send the joke as JSON 
+            fetchJoke(res); 
+        } else if (req.method === 'POST') {
+            // Handle the POST request from Warpcast frame button
+            fetchJoke((joke) => { // Modify to take the joke as a parameter
+                const newFrame = constructNewFrame(joke);
+                res.status(200).send(newFrame); 
+            });
+        } else {
+            res.status(405).send({ message: 'Method Not Allowed' });
+        }
     } else {
-        // Handle non-GET/POST requests or other routes
-        res.status(405).send({ message: 'Method Not Allowed' });
+        // Handle other routes as needed
+        res.status(404).send({ message: 'Not Found' });
     }
 };
 
@@ -49,4 +56,32 @@ function fetchJoke(res) {
         console.error('Error fetching joke from JokeAPI:', error);
         res.status(500).json({ message: 'Failed to fetch joke, please try again later.' });
     });
+}
+
+function constructNewFrame(jokeData) {
+    let jokeContent;
+    if (jokeData.type === 'single') {
+        jokeContent = jokeData.joke;
+    } else if (jokeData.type === 'twopart') {
+        jokeContent = `${jokeData.setup} ... ${jokeData.delivery}`;
+    } else {
+        jokeContent = 'No joke found, try again!';
+    }
+
+    return `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>I'm Feeling Lucky Joke</title>
+            <meta property="fc:frame" content="vNext" />
+            <meta property="fc:frame:image" content="https://feeling-lucky.vercel.app/background.png" /> 
+            <meta property="og:image" content="https://feeling-lucky.vercel.app/background.png" />
+        </head>
+        <body>
+            <p>${jokeContent}</p> 
+        </body>
+        </html>
+    `;
 }
