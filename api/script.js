@@ -12,17 +12,27 @@
 
 const axios = require('axios');
 
+//Converts POST requests to GET for compatibility with APIs requiring GET.
 module.exports = async (req, res) => {
-    console.log("Incoming request to /api/lucky");
+    // Check if the request is for fetching a joke
+    if (req.url === '/api/lucky' && req.method === 'GET') {
+        fetchJoke(res);
+    } else if (req.url === '/api/post-joke' && req.method === 'POST') {
+        // This route handles POST requests from the frame's meta button
+        fetchJoke(res);
+    } else {
+        // Handle non-GET/POST requests or other routes
+        res.status(405).send({ message: 'Method Not Allowed' });
+    }
+};
 
-    try {
-        console.log("Fetching joke from JokeAPI");
-        const jokeApiResponse = await axios.get('https://v2.jokeapi.dev/joke/Any', {
-            params: {
-                blacklistFlags: 'racist',
-            }
-        });
-
+function fetchJoke(res) {
+    console.log("Fetching joke from JokeAPI");
+    axios.get('https://v2.jokeapi.dev/joke/Any', {
+        params: {
+            blacklistFlags: 'racist',
+        }
+    }).then(jokeApiResponse => {
         console.log("JokeAPI response:", jokeApiResponse.data);
 
         if (jokeApiResponse.data.type === 'single') {
@@ -35,8 +45,8 @@ module.exports = async (req, res) => {
             console.log("No joke found in response");
             res.json({ message: 'No joke found, try again!' });
         }
-    } catch (error) {
+    }).catch(error => {
         console.error('Error fetching joke from JokeAPI:', error);
         res.status(500).json({ message: 'Failed to fetch joke, please try again later.' });
-    }
-};
+    });
+}
