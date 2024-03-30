@@ -74,11 +74,14 @@ function constructNewFrame(jokeData) {
         <!DOCTYPE html>
         <html lang="en">
         <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>I'm Feeling Lucky Joke</title>
+            <meta property="og:title" content="I'm Feeling Lucky Joke App" />
+            <!-- Farcaster Frame Meta Tags for Buttons -->
+            <meta property="fc:frame:button:1" content="I'm Feeling Lucky" />
+            <meta property="fc:frame:button:1:action" content="post" />
+            <meta property="fc:frame:button:1:post_url" content="/api/lucky" />
+            <!-- Warpcast minimum required tags Farcaster meta tags -->
             <meta property="fc:frame" content="vNext" />
-            <meta property="fc:frame:image" content="https://feeling-lucky.vercel.app/background.png" /> 
+            <meta property="fc:frame:image" content="https://feeling-lucky.vercel.app/background.png" />
             <meta property="og:image" content="https://feeling-lucky.vercel.app/background.png" />
         </head>
         <body>
