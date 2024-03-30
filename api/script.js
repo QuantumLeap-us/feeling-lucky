@@ -16,11 +16,11 @@ module.exports = async (req, res) => {
     // Check if the request is for fetching a joke
     if (req.url === '/api/lucky') {
         if (req.method === 'GET') {
-            // Existing logic to fetch and send the joke as JSON 
+            // Existing logic to fetch from Joke API and send the joke as JSON 
             fetchJoke(res); 
         } else if (req.method === 'POST') {
             // Handle the POST request from Warpcast frame button
-            fetchJoke((joke) => { // Modify to take the joke as a parameter
+            fetchJoke((joke) => { 
                 const newFrame = constructNewFrame(joke);
                 res.status(200).send(newFrame); 
             });
