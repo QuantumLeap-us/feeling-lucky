@@ -1,14 +1,13 @@
 {
-    "version": 2,
-    "rewrites": [
-      {
-        "source": "/api/lucky",
-        "destination": "/api/script.js"
+  "version": 2,
+  "rewrites": [
+      { 
+          "source": "/api/lucky", 
+          "destination": "/api/script.js" 
       },
       {
-        "source": "/(.*)",
-        "destination": "/public/index.html"
-      }
-    ]
-  }
-  
+          "source": "/",
+          "destination": "/public/index.html"
+      } 
+  ]
+}
