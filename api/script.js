@@ -10,30 +10,31 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
+// script.js
 const axios = require('axios');
 
 module.exports = async (req, res) => {
-    if (req.method !== 'POST') {
-        // Respond with an error if the request method is not POST
-        return res.status(405).send({ error: 'Method Not Allowed' });
-    }
+    if (req.method === 'POST') {
+        try {
+            const jokeApiResponse = await axios.get('https://v2.jokeapi.dev/joke/Any', {
+                params: {
+                    blacklistFlags: 'racist',
+                }
+            });
 
-    try {
-        const jokeApiResponse = await axios.get('https://v2.jokeapi.dev/joke/Any', {
-            params: {
-                blacklistFlags: 'racist',
+            if (jokeApiResponse.data.type === 'single') {
+                res.json({ message: jokeApiResponse.data.joke });
+            } else if (jokeApiResponse.data.type === 'twopart') {
+                res.json({ message: `${jokeApiResponse.data.setup} ... ${jokeApiResponse.data.delivery}` });
+            } else {
+                res.json({ message: 'No joke found, try again!' });
             }
-        });
-
-        if (jokeApiResponse.data.type === 'single') {
-            res.json({ message: jokeApiResponse.data.joke });
-        } else if (jokeApiResponse.data.type === 'twopart') {
-            res.json({ message: `${jokeApiResponse.data.setup} ... ${jokeApiResponse.data.delivery}` });
-        } else {
-            res.json({ message: 'No joke found, try again!' });
+        } catch (error) {
+            console.error('Error fetching joke:', error);
+            res.status(500).json({ message: 'Failed to fetch joke, please try again later.' });
         }
-    } catch (error) {
-        console.error('Error fetching joke:', error);
-        res.status(500).json({ message: 'Failed to fetch joke, please try again later.' });
+    } else {
+        // Handle non-POST requests or return a simple message
+        res.status(405).send({ message: 'Method Not Allowed' });
     }
 };
